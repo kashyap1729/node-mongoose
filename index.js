@@ -12,25 +12,40 @@ connect.then((db) => {
 
     console.log('Connected correctly to server');
 
-    Dishes.create({
+     Dishes.create({
         name: 'Uthappizza',
         description: 'test'
     })
-	.then((dish) => {
-            console.log(dish);
+    .then((dish) => {
+        console.log(dish);
 
-            return Dishes.find({}).exec();
+        return Dishes.findByIdAndUpdate(dish._id, {
+            $set: { description: 'Updated test'}
+        },{ 
+            new: true 
         })
-        .then((dishes) => {
-            console.log(dishes);
+        .exec();
+    })
+    .then((dish) => {
+        console.log(dish);
 
-            return db.collection('dishes').drop();
-        })
-        .then(() => {
-            return db.close();
-        })
-        .catch((err) => {
-            console.log(err);
+        dish.comments.push({
+            rating: 5,
+            comment: 'I\'m getting a sinking feeling!',
+            author: 'Leonardo di Carpaccio'
         });
 
+        return dish.save();
+    })
+    .then((dish) => {
+        console.log(dish);
+
+        return db.collection('dishes').drop();
+    })
+    .then(() => {
+        return db.close();
+    })
+    .catch((err) => {
+        console.log(err);
+    });
 });
