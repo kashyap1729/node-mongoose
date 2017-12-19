@@ -35,7 +35,7 @@ connect.then((db) => {
             author: 'Leonardo di Carpaccio'
         });
 
-        return dish.save();
+       return dish.save();
     })
     .then((dish) => {
         console.log(dish);
